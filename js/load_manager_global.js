@@ -1,0 +1,12 @@
+$(function(){
+    $('#header').load("views/header.html");
+    $('#navbar').load("views/navbar.html");
+    $('#footer').load("views/footer.html");
+    $('#all-cards').load("views/cards/all_cards.html");
+    $('#trip-welcome').load("views/trip_welcome.html");
+    $('#trip-welcome').load("views/trip_welcome.html");
+    $('#trip-welcome').load("views/trip_welcome.html");
+    $('#trip-welcome').load("views/trip_welcome.html");
+    $('#trip-welcome').load("views/trip_welcome.html");
+    $('#trip-welcome').load("views/trip_welcome.html");
+});
