@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Ml x Km</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <!-- JQuery -->
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/load_manager_pages.js"></script>
+</head>
+<body>
+<!-- Responsive navbar-->
+<div id="navbar"></div>
+<!-- Page Content-->
+<section class="position-relative py-4 py-xl-5">
+    <div class="container position-relative">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="card-body text-center p-sm-5 bg-dark bg-opacity-90">
+                    <h2 class="font-weight-hold mb-3 bg-warning text-black">Miles to Kilometers</h2>
+                    <div class="mb-3">
+                        <label for="miles-km"></label><input id="miles-km" type="text" name="miles-km" placeholder="Miles:">
+                    </div>
+                    <div class="mb-3">
+                        <label for="result"></label><input id="result" type="text" name="result" placeholder="Result:" disabled>
+                    </div>
+                    <h6 class="font-weight-hold mb-3 text-white">1 mile is 1.609 kilometers or 5280 feet.</h6>
+                    <div>
+                        <button onclick="miles_to_kilometers()" id="btn" class="btn btn-primary d-block w-100 mb-3">Convert</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container position-relative">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="card-body text-center p-sm-5 bg-dark bg-opacity-90">
+                    <h2 class="font-weight-hold mb-3 bg-warning text-black">Kilometers to Miles</h2>
+                    <div class="mb-3">
+                        <label for="km-miles"></label><input id="km-miles" type="text" name="km-miles" placeholder="Kilometers:">
+                    </div>
+                    <div class="mb-3">
+                        <label for="result-2"></label><input id="result-2" type="text" name="result-2" placeholder="Result:" disabled>
+                    </div>
+                    <h6 class="font-weight-hold mb-3 text-white">1 kilometer is approximately equal to 0.62137119 miles.</h6>
+                    <div>
+                        <button onclick="kilometers_to_miles()" id="btn-2" class="btn btn-primary d-block w-100 mb-3">Convert</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Footer-->
+<div id="footer"></div>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+<script src="js/miles_km.js"></script>
+</body>
+</html>

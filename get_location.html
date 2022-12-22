@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>Location</title>
+  <!-- Favicon-->
+  <link rel="icon" type="image/x-icon" href="" />
+  <!-- Bootstrap icons-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- Core theme CSS (includes Bootstrap)-->
+  <link href="css/styles.css" rel="stylesheet" />
+  <!-- JQuery -->
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript" src="js/load_manager_pages.js"></script>
+</head>
+<body>
+<!-- Responsive navbar-->
+<div id="navbar"></div>
+<!-- Page Content-->
+=<section class="position-relative ру-4 ру-хӏ-5">
+  <div class="container position-relative">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+        <div class="card mb-5 bg-dark bg-opacity-90">
+          <div class="card-body p-sm-5">
+            <h2 class="text-center bg-warning text-black mb-4">Find address</h2>
+            <form id="form">
+              <label for="zipcode">Zip Code:</label>
+              <input type="text" id="zipcode" name="zipcode">
+              <button type="submit">Find Address</button>
+            </form>
+            <div id="result"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+=</section>
+<!-- Footer-->
+<div id="footer"></div>
+<!-- Bootstrap core JS-->
+<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+<script>
+  const form = document.getElementById("form");
+  const zipcodeInput = document.getElementById("zipcode");
+  const resultDiv = document.getElementById("result");
+
+  form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    const zipcode = zipcodeInput.value;
+    if (zipcode.length === 5) {
+      resultDiv.innerHTML = "Loading...";
+      fetch(`https://api.zippopotam.us/us/${zipcode}`)
+              .then(response => response.json())
+              .then(data => {
+                const result = `
+          <h3>Country: ${data.country}</h3>
+          <h3>State: ${data.state}</h3>
+          <h3>City: ${data.places[0]["place name"]}</h3>
+          <h3>Latitude: ${data.places[0]["latitude"]}</h3>
+          <h3>Longitude: ${data.places[0]["longitude"]}</h3>
+        `;
+                resultDiv.innerHTML = result;
+              })
+              .catch(error => {
+                resultDiv.innerHTML = "Error: " + error;
+              });
+    } else {
+      resultDiv.innerHTML = "Please enter a valid zip code.";
+    }
+  });
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+</body>
+</html>

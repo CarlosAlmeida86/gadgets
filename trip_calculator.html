@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Trip Calculator</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <!-- JQuery -->
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/load_manager_pages.js"></script>
+</head>
+<body>
+<!-- Responsive navbar-->
+<div id="navbar"></div>
+<!-- Page Content-->
+=<section class="position-relative ру-4 ру-хӏ-5">
+    <div class="container position-relative">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                <div class="card mb-5 bg-dark bg-opacity-75">
+                    <div class="card-body p-sm-5">
+                        <h2 class="text-center bg-warning text-black mb-4">Trip Calculator</h2>
+                            <div class="mb-3">
+                                <input id="gallon_price" class="form-control" type="text" name="gallon_price" placeholder="Gallon price" />
+                            </div>
+                            <div class="mb-3">
+                                <input id="mpg" class="form-control" type="text" name="mpg" placeholder="MPG" />
+                            </div>
+                            <div class="mb-3">
+                                <input id="distance" class="form-control" type="text" name="distance" placeholder="Distance" />
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="mb-3">
+                                <input id="result" class="form-control" type="text" name="result" disabled placeholder="Result" />
+                            </div>
+                            <div>
+                                <button onclick="price_calculator()" class="btn btn-primary d-block w-100" type="submit">Send </button>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+=</section>
+<!-- Footer-->
+<div id="footer"></div>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+<script>
+    function price_calculator() {
+        var gallonPrice = $("#gallon_price").val();
+        var mpg = $("#mpg").val();
+        var distance = $("#distance").val();
+        var result = parseFloat(gallonPrice) / parseFloat(mpg) * parseFloat(distance);
+
+        $('#result').val("$"+result.toFixed(2));
+    }
+</script>
+</body>
+</html>
