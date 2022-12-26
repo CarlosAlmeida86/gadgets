@@ -24,15 +24,17 @@
   <div class="container position-relative">
     <div class="row d-flex justify-content-center">
       <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
-        <div class="card mb-5 bg-dark bg-opacity-90">
+        <div class="card mb-5 text-white bg-dark bg-opacity-90">
           <div class="card-body p-sm-5">
             <h2 class="text-center bg-warning text-black mb-4">Find address</h2>
             <form id="form">
-              <label for="zipcode">Zip Code:</label>
-              <input type="text" id="zipcode" name="zipcode">
-              <button type="submit">Find Address</button>
+              <h6 class="font-weight-hold mb-3 text-white text-center">Enter a zip code to find its location</h6>
+              <div class="d-flex justify-content-center">
+                <input type="text" id="zipcode" name="zipcode" class="m-2" placeholder="Zip Code:">
+              </div>
+              <button id="btn" class="btn btn-primary d-block w-50 m-auto">Find Address</button>
             </form>
-            <div id="result"></div>
+            <div id="result" class="m-3"></div>
           </div>
         </div>
       </div>
@@ -57,11 +59,11 @@
               .then(response => response.json())
               .then(data => {
                 const result = `
-          <h3>Country: ${data.country}</h3>
-          <h3>State: ${data.state}</h3>
-          <h3>City: ${data.places[0]["place name"]}</h3>
-          <h3>Latitude: ${data.places[0]["latitude"]}</h3>
-          <h3>Longitude: ${data.places[0]["longitude"]}</h3>
+          <h4>Country: ${data.country}</h4>
+          <h4>State: ${data.state}</h4>
+          <h4>City: ${data.places[0]["place name"]}</h4>
+          <h6>Latitude: ${data.places[0]["latitude"]}</h6>
+          <h6>Longitude: ${data.places[0]["longitude"]}</h6>
         `;
                 resultDiv.innerHTML = result;
               })

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Trip Calculator</title>
+    <title>Gas Cost Calculator</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="" />
     <!-- Bootstrap icons-->
@@ -20,35 +20,38 @@
 <!-- Responsive navbar-->
 <div id="navbar"></div>
 <!-- Page Content-->
-=<section class="position-relative ру-4 ру-хӏ-5">
+.<section class="position-relative ру-4 ру-хӏ-5">
     <div class="container position-relative">
         <div class="row d-flex justify-content-center">
             <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
-                <div class="card mb-5 bg-dark bg-opacity-75">
+                <div class="card mb-5 bg-dark bg-opacity-90">
                     <div class="card-body p-sm-5">
-                        <h2 class="text-center bg-warning text-black mb-4">Trip Calculator</h2>
+                        <h2 class="text-center bg-warning text-black mb-4">Gas Cost Calculator</h2>
+                        <p class="fs-8 text-white text-center">Welcome to our Trip Cost Calculator!</p>
+                        <p class="fs-8 text-white">Are you planning a road trip and wondering how much it will cost in gas? Our Trip Cost Calculator can help you estimate the cost of your trip based on the gas price, vehicle mpg, and trip distance.
+                            To use our calculator, simply enter the gas price, vehicle mpg, and trip distance in the form and click the "Calculate cost" button. The calculator will then provide an estimate of the total cost of your trip.</p>
+                        <p class="fs-8 text-white">We hope our Trip Cost Calculator helps you plan your road trip and budget accordingly. Happy travels!</p>
                             <div class="mb-3">
                                 <input id="gallon_price" class="form-control" type="text" name="gallon_price" placeholder="Gallon price" />
                             </div>
                             <div class="mb-3">
-                                <input id="mpg" class="form-control" type="text" name="mpg" placeholder="MPG" />
+                                <input id="mpg" class="form-control" type="text" name="mpg" placeholder="Vehicle MPG" />
                             </div>
                             <div class="mb-3">
-                                <input id="distance" class="form-control" type="text" name="distance" placeholder="Distance" />
+                                <input id="distance" class="form-control" type="text" name="distance" placeholder="Trip Distance" />
                             </div>
                             <div class="mb-3"></div>
-                            <div class="mb-3">
-                                <input id="result" class="form-control" type="text" name="result" disabled placeholder="Result" />
-                            </div>
                             <div>
-                                <button onclick="price_calculator()" class="btn btn-primary d-block w-100" type="submit">Send </button>
-                            </div>
+                                <button onclick="price_calculator()" class="btn btn-primary d-block w-50 mx-auto m-3" type="submit">Calculate cost</button>                            </div>
+                        <div class="mb-3">
+                            <input id="result" class="form-control" type="text" name="result" disabled placeholder="Result" class="bg-white text-black" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-=</section>
+.</section>
 <!-- Footer-->
 <div id="footer"></div>
 <!-- Bootstrap core JS-->
@@ -62,7 +65,7 @@
         var distance = $("#distance").val();
         var result = parseFloat(gallonPrice) / parseFloat(mpg) * parseFloat(distance);
 
-        $('#result').val("$"+result.toFixed(2));
+        $('#result').val("Your estimated cost is $"+result.toFixed(2)+" for this trip.");
     }
 </script>
 </body>
