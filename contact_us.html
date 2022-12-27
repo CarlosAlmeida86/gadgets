@@ -20,39 +20,39 @@
 <!-- Responsive navbar-->
 <div id="navbar"></div>
 <!-- Page Content-->
-  <section class="position-relative py-4 py-xl-5">
-    <div class="container position-relative">
-      <div class="row d-flex justify-content-center">
-        <div class="col-md-8 col-lg-6 col-xl-5">
-          <div class="card bg-dark bg-opacity-90">
-            <div class="card-body text-center p-sm-5">
-              <h2 class="font-weight-hold mb-3 bg-warning text-black">Contact us</h2>
-              <form method="post">
-                <div class="mb-3">
-                  <label for="name-2"></label><input id="name-2" class="form-control" type="text" name="name" placeholder="Name">
-                </div>
-                <div class="mb-3">
-                  <label for="email-2"></label><input id="email-2" class="form-control" type="text" name="email" placeholder="E-mail">
-                </div>
-                <div class="mb-3">
-                  <label for="phone-2"></label><input id="phone-2" class="form-control" type="text" name="phone" placeholder="Phone">
-                </div>
-                <div class="mb-3">
-                  <label for="Subject-2"></label><input id="Subject-2" class="form-control" type="text" name="subject" placeholder="Subject">
-                </div>
-                <div class="mb-3">
-                  <label for="message-2"></label><textarea id="message-2" class="form-control" name="message" rows="6" placeholder="Message"></textarea>
-                </div>
-                <div>
-                  <button class="btn btn-primary d-block w-100" type="submit">Send</button>
-                </div>
-              </form>
-            </div>
+<section class="position-relative py-4 py-xl-5">
+  <div class="container position-relative">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-dark bg-opacity-90">
+          <div class="card-body text-center p-sm-5">
+            <h2 class="font-weight-hold mb-3 bg-warning text-black">Contact us</h2>
+            <form method="post" action="send-email.php">
+              <div class="mb-3">
+                <label for="name-2"></label><input id="name-2" class="form-control" type="text" name="name" placeholder="Name">
+              </div>
+              <div class="mb-3">
+                <label for="email-2"></label><input id="email-2" class="form-control" type="texttype" name="email" placeholder="E-mail">
+              </div>
+              <div class="mb-3">
+                <label for="phone-2"></label><input id="phone-2" class="form-control" type="text" name="phone" placeholder="Phone">
+              </div>
+              <div class="mb-3">
+                <label for="Subject-2"></label><input id="Subject-2" class="form-control" type="text" name="subject" placeholder="Subject">
+              </div>
+              <div class="mb-3">
+                <label for="message-2"></label><textarea id="message-2" class="form-control" name="message" rows="6" placeholder="Message"></textarea>
+              </div>
+              <div>
+                <button class="btn btn-primary d-block w-100" type="submit">Send</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 <!-- Footer-->
 <div id="footer"></div>
 <!-- Bootstrap core JS-->
@@ -61,3 +61,25 @@
 <script src="js/scripts.js"></script>
 </body>
 </html>
+
+//To apply the changes to your code, you will need to make the following changes:
+
+// 1 Add an action attribute to the form element and set it to the URL of the PHP script that will process the form submission:
+<form method="post" action="send-email.php">
+
+// 2In the send-email.php script, use the $_POST superglobal to access the form data and the mail() function to send the email:
+
+<?php
+
+$name = $_POST['name'];
+$email = $_POST['email'];
+$phone = $_POST['phone'];
+$subject = $_POST['subject'];
+$message = $_POST['message'];
+
+$to = "your-email@example.com";
+$headers = "From: $email\r\n";
+
+mail($to, $subject, $message, $headers);
+
+?>

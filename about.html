@@ -19,17 +19,86 @@
 <body>
 <!-- Responsive navbar-->
 <div id="navbar"></div>
+<div id="counter">
+    <p class="text-center m-1 fw-bold text-black">You are visitor number: <span id="count">0</span></p>
+    <p class="text-center m-1 fw-bold text-black">Number of unique IP addresses: <span id="count-2">0</span></p>
+</div>
 <!-- Page Content-->
 <div class="m-4 m-lg-5 bg-dark bg-opacity-75 text-white">
-    <header class="display-5 fw-bold text-center text-white bg-black">Trip Calculator</header>
+    <header class="display-5 fw-bold text-center bg-warning text-black mb-4">Trip Calculator</header>
     <h1 class="fs-2 text-center text-white bg-black">Welcome to Trip Calculator - the ultimate resource for travelers!</h1>
-    <p class="fs-4 text-center text-black bg-white">We offer a convenient and reliable way to plan your next trip, Our goal is to make traveling easier and more affordable for everyone.</p>
-    <p class="fs-4 text-center text-black bg-white">We understand the power of travel and how it can create life-long memories, and we make it our mission to help you make the most of your journey. Our team of experts uses the latest technologies to develop efficient solutions to help travelers calculate the cost of a car trip, track budgets, find the best routes,compare prices, and much more.</p>
-    <p class="fs-4 text-center text-black bg-white">We provide some useful conversion tools so you can quickly estimate costs.</p>
-    <p class="fs-4 text-center text-black bg-white">Our goal is to make sure your trip is as enjoyable and stress-free as possible, Whether you’re planning a weekend getaway or a month-long expedition.</p>
-    <p class="fs-4 text-center text-black bg-white">We’re here to make sure your travels are as easy and affordable as possible.</p>
+    <p class="font-weight-hold mb-3 text-white text-center">We offer a convenient and reliable way to plan your next trip, Our goal is to make traveling easier and more affordable for everyone.</p>
+    <p class="font-weight-hold mb-3 text-white text-center">We understand the power of travel and how it can create life-long memories, and we make it our mission to help you make the most of your journey. Our team of experts uses the latest technologies to develop efficient solutions to help travelers calculate the cost of a car trip, track budgets, find the best routes,compare prices, and much more.</p>
+    <p class="font-weight-hold mb-3 text-white text-center">We provide some useful conversion tools so you can quickly estimate costs.</p>
+    <p class="font-weight-hold mb-3 text-white text-center">Our goal is to make sure your trip is as enjoyable and stress-free as possible, Whether you’re planning a weekend getaway or a month-long expedition.</p>
+    <p class="font-weight-hold mb-3 text-white text-center">We’re here to make sure your travels are as easy and affordable as possible.</p>
     <h1 class="fs-4 text-center text-white bg-black">Thanks for choosing Trip Calculator for your next adventure!</h1>
 </div>
+<script>
+    function getCookie(name) {
+        // Get the value of the cookie with the specified name
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    function setCookie(name, value) {
+        // Set the value of the cookie with the specified name
+        document.cookie = `${name}=${value}`;
+    }
+
+    function displayCount() {
+        // Get the current count from the cookie
+        let count = getCookie('count');
+
+        // If the count cookie doesn't exist, set it to 0
+        if (count === undefined) {
+            count = 0;
+            setCookie('count', 0);
+        }
+
+        // Increment the count and update the cookie
+        count++;
+        setCookie('count', count);
+
+        // Display the count on the page
+        document.getElementById("count").innerHTML = count;
+    }
+
+    function displayIP() {
+        // Use the fetch API to retrieve the user's IP address
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                // Get the IP address from the response
+                const ip = data.ip;
+
+                // Get the list of IP addresses from the cookie
+                let ipList = getCookie('ipList');
+
+                // If the IP address cookie doesn't exist, create it
+                if (ipList === undefined) {
+                    ipList = [];
+                    setCookie('ipList', JSON.stringify(ipList));
+                } else {
+                    // Parse the IP address list from the cookie
+                    ipList = JSON.parse(ipList);
+                }
+
+                // Check if the current IP address is in the list
+                if (!ipList.includes(ip)) {
+                    // If it's not in the list, add it and update the cookie
+                    ipList.push(ip);
+                    setCookie('ipList', JSON.stringify(ipList));
+
+                    // Increment the count and display it on the page
+                    displayCount();
+                }
+            });
+    }
+
+    window.onload = displayIP;
+</script>
 <!-- Footer-->
 <div id="footer"></div>
 <!-- Bootstrap core JS-->

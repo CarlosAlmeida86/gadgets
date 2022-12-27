@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Currency</title>
+    <title>Dollar Price</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="" />
     <!-- Bootstrap icons-->
@@ -20,7 +20,51 @@
 <!-- Responsive navbar-->
 <div id="navbar"></div>
 <!-- Page Content-->
+=<section class="position-relative ру-4 ру-хӏ-5">
+    <div class="container position-relative">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                <div class="card mb-5 text-white bg-dark bg-opacity-90">
+                    <div class="card-body p-sm-5">
+                        <h2 class="text-center bg-warning text-black mb-4">Dollar Price</h2>
+                        <form class="mx-auto text-center">
+                            <label for="currency">Select "Dollar" or another currency and press 'Get Quotation' to get today's quotation in Real (R$):</label><br>
+                            <select id="currency">
+                                <option value="USD">Dollar</option>
+                                <option value="EUR">Euro</option>
+                                <option value="GBP">GBP</option>
+                                <option value="JPY">JPY</option>
+                                <!-- Add other options for different currencies -->
+                            </select>
+                            <div id="result" class="text-warning m-1"></div>
+                            <br><br>
+                            <button type="button" class="btn btn-primary d-block w-50 m-auto" onclick="convertCurrency()">Get quotation</button>
+                        </form>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    =</section>
+</div>
+<script>
+    function convertCurrency() {
+        // Get the selected currency
+        var currency = document.getElementById("currency").value;
 
+        // Make the API request to get the currency exchange rate
+        fetch(`https://economia.awesomeapi.com.br/last/${currency}-BRL`)
+            .then(response => response.json())
+            .then(data => {
+                // Update the result div with the converted amount
+                document.getElementById("result").innerHTML = `1 USD = R$ ${data[currency + 'BRL']['ask']}`;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+</script>
 <!-- Footer-->
 <div id="footer"></div>
 <!-- Bootstrap core JS-->

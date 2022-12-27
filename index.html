@@ -19,9 +19,6 @@
     <body>
         <!-- Responsive navbar-->
         <div id="navbar"></div>
-        <div id="counter">
-            <p>You are visitor number: <span id="count">0</span></p>
-        </div>
         <!-- Header-->
         <div id="header"></div>
         <!-- Page Content-->
@@ -31,16 +28,5 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
-        <script>
-            let count = 0;
-
-            function incrementCount() {
-                count++;
-                document.getElementById("count").innerHTML = count;
-            }
-
-            window.onload = incrementCount;
-
-        </script>
     </body>
 </html>
