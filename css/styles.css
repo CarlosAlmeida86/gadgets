@@ -87,7 +87,7 @@ body {
   text-align: var(--bs-body-text-align);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  background: url(/dust_road.png) center center/cover no-repeat;
+  background: #fff center center/cover no-repeat;
 }
 
 hr {
