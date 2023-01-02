@@ -36,11 +36,14 @@
         <option value="" disabled selected>Select a category</option>
         <!-- Options for expense categories will be populated here -->
     </select><br>
+    <label for="expenseDescription">Description:</label><br>
+    <input type="text" id="expenseDescription"><br>
     <label for="expenseAmount">Amount:</label><br>
     <input type="number" id="expenseAmount" placeholder="Enter amount:"><br>
     <label for="expenseDate">Date:</label><br>
     <input type="date" id="expenseDate"><br>
     <button type="button" id="submit-btn" class="m-3" onclick="enterExpense()">Enter Expense</button>
+
 </form>
 <br>
 <form class="text-center">
@@ -65,27 +68,18 @@
     <div id="expense-list"></div>
 </form>
 <br>
-
 <script>
     // JavaScript for the budget tracker
 
     // Initialize variables for budget and expenses
-    let budget = 0;
-    let expenses = [];
+    let budget = localStorage.getItem("budget") || 0;
+    let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
-    // Check if there is already a budget and expenses stored in local storage
-    if (localStorage.getItem("budget")) {
-        budget = localStorage.getItem("budget");
-    }
-    if (localStorage.getItem("expenses")) {
-        expenses = JSON.parse(localStorage.getItem("expenses"));
-    }
-
-    // Function to create a budget
+    // Function to create the budget
     function createBudget() {
         // Get the budget amount from the form
-        budget = document.getElementById("budgetAmount").value;
-        // Store the budget in local storage
+        budget = Number(document.getElementById("budgetAmount").value);
+        // Save the budget in localStorage
         localStorage.setItem("budget", budget);
         // Display the budget
         displayBudget();
@@ -93,12 +87,22 @@
 
     // Function to update the budget
     function updateBudget() {
-        // Get the updated budget amount from the form
-        budget = document.getElementById("budgetAmount").value;
-        // Store the updated budget in local storage
+        // Get the budget amount from the form
+        budget = Number(document.getElementById("budgetAmount").value);
+        // Save the budget in localStorage
         localStorage.setItem("budget", budget);
-        // Display the budget
+        // Update the budget display
         displayBudget();
+    }
+
+    // Function to display the budget
+    function displayBudget() {
+        // Calculate the total expenses
+        let totalExpenses = expenses.reduce((acc, expense) => acc + Number(expense.amount), 0);
+        // Calculate the remaining budget
+        let remainingBudget = budget - totalExpenses;
+        // Display the budget and total expenses in the budgetDisplay div
+        document.getElementById("budgetDisplay").innerHTML = `Budget: $${budget.toFixed(2)}  |  Total Expenses: $${totalExpenses.toFixed(2)}  |  Remaining Budget: $${remainingBudget.toFixed(2)}`;
     }
 
     // Function to enter an expense
@@ -107,249 +111,140 @@
         let expenseCategory = document.getElementById("expenseCategory").value;
         let expenseAmount = document.getElementById("expenseAmount").value;
         let expenseDate = document.getElementById("expenseDate").value;
-        // Create an object for the expense with the category, amount, and date
+        let expenseDescription = document.getElementById("expenseDescription").value;
+        // Create an object for the expense with the category, amount, date, and description
         let expense = {
             category: expenseCategory,
             amount: expenseAmount,
-            date: expenseDate
+            date: expenseDate,
+            description: expenseDescription
         };
-        // Add the expense to the expenses array
+// Add the expense to the expenses array
         expenses.push(expense);
-        // Store the updated expenses array in local storage
+// Save the expenses in localStorage
         localStorage.setItem("expenses", JSON.stringify(expenses));
-        // Display the budget and expenses
+// Display the expenses
+        displayExpenses();
+    }
+
+    // Function to display the expenses
+    function displayExpenses() {
+        // Clear the expense list div
+        document.getElementById("expense-list").innerHTML = "";
+        // Loop through the expenses array
+        expenses.forEach((expense, index) => {
+            // Create a new li element for the expense
+            let li = document.createElement("li");
+            // Set the innerHTML of the li element to the expense
+            // Include the amount, date, and description of the expense
+            li.innerHTML = `${expense.date}: $${expense.amount} - ${expense.description} (${expense.category})`;
+            // Create a delete button for the expense
+            let deleteBtn = document.createElement("button");
+            deleteBtn.innerHTML = "Delete";
+            // Attach an event listener to the delete button
+            deleteBtn.addEventListener("click", () => {
+                // Remove the expense from the expenses array
+                expenses.splice(index, 1);
+                // Save the updated expenses in localStorage
+                localStorage.setItem("expenses", JSON.stringify(expenses));
+                // Update the expense list to reflect the deletion
+                displayExpenses();
+            });
+            // Append the delete button to the li element
+            li.appendChild(deleteBtn);
+            // Append the li element to the expense list div
+            document.getElementById("expense-list").appendChild(li);
+        });
+        // Calculate and display the total amount spent on each category
         displayBudget();
     }
 
-    function deleteExpense(expenseId) {
-        // Find the index of the expense in the expenses array
-        let index = expenses.findIndex(expense => expense.id === expenseId);
-        // Remove the expense from the expenses array
-        expenses.splice(index, 1);
-        // Store the updated expenses array in local storage
-        localStorage.setItem("expenses", JSON.stringify(expenses));
-        // Display the budget and expenses
-        displayBudget();
+    // Function to display the total amount spent on each category
+    function displayCategoryTotals() {
+        // Initialize an object to hold the totals for each category
+        let categoryTotals = {};
+        // Loop through the expenses array
+        expenses.forEach(expense => {
+            // Check if the expense's category is already in the categoryTotals object
+            if (expense.category in categoryTotals) {
+                // If it is, add the expense's amount to the existing total for that category
+                categoryTotals[expense.category] += Number(expense.amount);
+            } else {
+                // If it isn't, add a new property to the object for the category and set its value to the expense's amount
+                categoryTotals[expense.category] = Number(expense.amount);
+            }
+        });
+        // Clear the expenses display div
+        document.getElementById("expenses-display").innerHTML = "";
+        // Loop through the categoryTotals object
+        for (let category in categoryTotals) {
+            // Create a new div element to display the category and its total
+            let div = document.createElement("div");
+            // Set the innerHTML of the div to the category and its total
+            div.innerHTML = `${category}: $${categoryTotals[category].toFixed(2)}`;
+            // Append the div to the expenses display div
+            document.getElementById("expenses-display").appendChild(div);
+        }
     }
 
-    // Function to add a new expense category
+    // Function to add a new category to the expense form
     function addCategory() {
         // Get the new category from the form
         let newCategory = document.getElementById("newCategoryInput").value;
-        // Add the new category to the expense categories array
-        expenseCategories.push(newCategory);
-        // Store the updated expense categories array in local storage
-        localStorage.setItem("expenseCategories", JSON.stringify(expenseCategories));
-        // Populate the expense category options
-        populateExpenseCategories();
+        // Create a new option element for the select element
+        let option = document.createElement("option");
+        // Set the value of the option element to the new category
+        option.value = newCategory;
+        // Set the innerHTML of the option element to the new category
+        option.innerHTML = newCategory;
+        // Append the option element to the select element
+        document.getElementById("expenseCategory").appendChild(option);
+        // Clear the input field
+        document.getElementById("newCategoryInput").value = "";
+        displayCategoryTotals();
     }
 
-    // Function to delete an expense category
+    // Function to delete a category from the expense form
     function deleteCategory() {
-        // Get the category to delete from the form
+        // Get the selected category from the form
         let categoryToDelete = document.getElementById("deleteCategorySelect").value;
-        // Find the index of the category in the expense categories array
-        let categoryIndex = expenseCategories.indexOf(categoryToDelete);
-        // Remove the category from the expense categories array
-        expenseCategories.splice(categoryIndex, 1);
-        // Store the updated expense categories array in local storage
-        localStorage.setItem("expenseCategories", JSON.stringify(expenseCategories));
-        // Populate the expense category options
-        populateExpenseCategories();
+        // Remove the selected option element from the select element
+        document.getElementById("deleteCategorySelect").remove(document.getElementById("deleteCategorySelect").selectedIndex);
+        // Filter the expenses array to remove any expenses with the deleted category
+        expenses = expenses.filter(expense => expense.category !== categoryToDelete);
+        // Save the updated expenses in localStorage
+        localStorage.setItem("expenses", JSON.stringify(expenses));
+        // Update the expense list to reflect the deletion
+        displayExpenses();
     }
 
-    // Function to display the budget and expenses
-    function displayBudget() {
-        // Initialize variables for the total expenses and remaining budget
-        let totalExpenses = 0;
-        let remainingBudget = budget;
-        // Calculate the total expenses and remaining budget
-        for (let i = 0; i < expenses.length; i++) {
-            totalExpenses += expenses[i].amount;
-            remainingBudget -= expenses[i].amount;
-        }
-
-        // Get the budget display div
-        let budgetDisplayDiv = document.getElementById("budgetDisplay");
-        // Clear the budget display div
-        budgetDisplayDiv.innerHTML = "";
-        // Create a heading for the budget display div
-        let budgetHeading = document.createElement("h2");
-        budgetHeading.innerHTML = "Budget and Expenses";
-        budgetDisplayDiv.appendChild(budgetHeading);
-        // Create a paragraph for the budget amount
-        let budgetAmountPara = document.createElement("p");
-        budgetAmountPara.innerHTML = "Budget: $" + budget;
-        budgetDisplayDiv.appendChild(budgetAmountPara);
-        // Create a paragraph for the total expenses
-        let totalExpensesPara = document.createElement("p");
-        totalExpensesPara.innerHTML = "Total Expenses: $" + totalExpenses;
-        budgetDisplayDiv.appendChild(totalExpensesPara);
-        // Create a paragraph for the remaining budget
-        let remainingBudgetPara = document.createElement("p");
-        remainingBudgetPara.innerHTML = "Remaining Budget: $" + remainingBudget;
-        budgetDisplayDiv.appendChild(remainingBudgetPara);
-        // Create a table for the expenses
-        let expensesTable = document.createElement("table");
-        budgetDisplayDiv.appendChild(expensesTable);
-        // Create a row for the table headings
-        let headingsRow = document.createElement("tr");
-        expensesTable.appendChild(headingsRow);
-        // Create table headings for the category, amount, and date
-        let categoryHeading = document.createElement("th");
-        categoryHeading.innerHTML = "Category";
-        headingsRow.appendChild(categoryHeading);
-        let amountHeading = document.createElement("th");
-        amountHeading.innerHTML = "Amount";
-        headingsRow.appendChild(amountHeading);
-        let dateHeading = document.createElement("th");
-        dateHeading.innerHTML = "Date";
-        headingsRow.appendChild(dateHeading);
-        // Add rows to the table for each expense
-        for (let i = 0; i < expenses.length; i++) {
-            let expenseRow = document.createElement("tr");
-            expensesTable.appendChild(expenseRow);
-            let categoryCell = document.createElement("td");
-            categoryCell.innerHTML = expenses[i].category;
-            expenseRow.appendChild(categoryCell);
-            let amountCell = document.createElement("td");
-            amountCell.innerHTML = "$" + expenses[i].amount;
-            expenseRow.appendChild(amountCell);
-            let dateCell = document.createElement("td");
-            dateCell.innerHTML = expenses[i].date;
-            expenseRow.appendChild(dateCell);
-        }
+    // Check for saved budget and expenses in localStorage
+    if (localStorage.getItem("budget")) {
+        budget = Number(localStorage.getItem("budget"));
+        displayBudget();
     }
-    // Function to populate the expense category options
-    function populateExpenseCategories() {
-        // Get the expense category select element
-        let expenseCategorySelect = document.getElementById("expenseCategory");
-        // Get the delete category select element
-        let deleteCategorySelect = document.getElementById("deleteCategorySelect");
-        // Clear the options in both select elements
-        expenseCategorySelect.innerHTML = "";
-        deleteCategorySelect.innerHTML = "";
-        // Add an option to both select elements for each expense category
-        for (let i = 0; i < expenseCategories.length; i++) {
-            let expenseCategoryOption = document.createElement("option");
-            expenseCategoryOption.value = expenseCategories[i];
-            expenseCategoryOption.innerHTML = expenseCategories[i];
-            expenseCategorySelect.appendChild(expenseCategoryOption);
-            let deleteCategoryOption = document.createElement("option");
-            deleteCategoryOption.value = expenseCategories[i];
-            deleteCategoryOption.innerHTML = expenseCategories[i];
-            deleteCategorySelect.appendChild(deleteCategoryOption);
-        }
+    if (localStorage.getItem("expenses")) {
+        expenses = JSON.parse(localStorage.getItem("expenses"));
+        displayExpenses();
     }
 
-    // Function to display the budget and expenses
-    function displayBudget() {
-        // Initialize variables for the total expenses and remaining budget
-        let totalExpenses = 0;
-        let remainingBudget = budget;
-        // Calculate the total expenses and remaining budget
-        for (let i = 0; i < expenses.length; i++) {
-            totalExpenses += expenses[i].amount;
-            remainingBudget -= expenses[i].amount;
-        }
-
-        // Get the budget display div
-        let budgetDisplayDiv = document.getElementById("budgetDisplay");
-        // Clear the budget display div
-        budgetDisplayDiv.innerHTML = "";
-        // Add the budget and expenses information to the budget display div
-        budgetDisplayDiv.innerHTML += `<p1>Budget: $${budget}</p1><br>`;
-        budgetDisplayDiv.innerHTML += `<p1>Total Expenses: $${totalExpenses}</p1><br>`;
-        budgetDisplayDiv.innerHTML += `<p1>Remaining Budget: $${remainingBudget}</p1><br>`;
-
-        // Get the expense list div
-        let expenseListDiv = document.getElementById("expense-list");
-        // Clear the expense list div
-        expenseListDiv.innerHTML = "";
-// Add the expense description to the top of the list
-        expenseListDiv.innerHTML = `
-  <div class="expense-description fw-bold text-center">
-    <span class="expense-category">Category - </span>
-    <span class="expense-amount">Amount - </span>
-    <span class="expense-date">Date</span>
-  </div>
-`;
-
-// Iterate through the expenses array and add the values to the list
-        for (let i = 0; i < expenses.length; i++) {
-            expenseListDiv.innerHTML += `
-    <div class="expense text-center" data-expense-id="${expenses[i].id}">
-      <span class="expense-category">${expenses[i].category}:</span>
-      <span class="expense-amount">$${expenses[i].amount}</span>
-      <span class="expense-date"> (${expenses[i].date})</span>
-    </div>
-  `;
-        }
-
-// Add to delete expense form to the expense list div
-        expenseListDiv.innerHTML += `
-<br>
-  <form id="delete-expense-form" class="text-center">
-    <label for="expense-to-delete" class="fw-bold">Select Expense to Delete:</label><br>
-    <select id="expense-to-delete" name="expense-to-delete">
-      <option value="" disabled selected>Select an expense</option>
-      <!-- Options for expenses will be populated here -->
-    </select>
-    <button type="button" class="m-3" onclick="deleteSelectedExpense()">Delete Expense</button>
-  </form>
-`;
-
-// Populate the options for the expenses select dropdown
-        populateExpenses();
-    }
-
-    // Function to populate the options for the expenses select dropdown
-    function populateExpenses() {
-        // Get the expenses select dropdown
-        let expensesSelect = document.getElementById("expense-to-delete");
-        // Clear the options
-        expensesSelect.innerHTML = "";
-        // Add the default option
-        expensesSelect.innerHTML += `<option value="" disabled selected>Select an expense</option>`;
-        // Iterate through the expenses array and add an option for each expense
-        for (let i = 0; i < expenses.length; i++) {
-            expensesSelect.innerHTML += `<option value="${expenses[i].id}">${expenses[i].category} - $${expenses[i].amount} - ${expenses[i].date}</option>`;
-        }
-    }
-
-    // Function to delete the selected expense
-    function deleteSelectedExpense() {
-        // Get the selected expense id
-        let expenseId = document.getElementById("expense-to-delete").value;
-        // Delete the expense
-        deleteExpense(expenseId);
-    }
-
-    document.getElementById("newCategoryInput").addEventListener("input", function() {
-        document.querySelector("#deleteCategorySelect option[value='']").value = this.value;
+    // Populate the select elements with options from the expenses array
+    expenses.forEach(expense => {
+        let option = document.createElement("option");
+        option.value = expense.category;
+        option.innerHTML = expense.category;
+        document.getElementById("expenseCategory").appendChild(option);
+        option = document.createElement("option");
+        option.value = expense.category;
+        option.innerHTML = expense.category;
+        document.getElementById("deleteCategorySelect").appendChild(option);
     });
 
-
-    // Initialize the expense categories array
-    let expenseCategories = [];
-
-    // Check if there is already an expense categories array stored in local storage
-    if (localStorage.getItem("expenseCategories")) {
-        expenseCategories = JSON.parse(localStorage.getItem("expenseCategories"));
-    }
-
-    // Populate the expense category options
-    populateExpenseCategories();
-
-    // Display the budget and expenses
-    displayBudget();
-
+    // Load the navbar
+    $(function() {
+        $("#navbar").load("navbar.html");
+    });
 </script>
+
 </body>
-<!-- Footer-->
-<div id="footer"></div>
-<!-- Bootstrap core JS-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Core theme JS-->
-<script src="js/scripts.js"></script>
 </html>
