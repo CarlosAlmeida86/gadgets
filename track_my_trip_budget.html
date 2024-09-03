@@ -3,70 +3,120 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Budget</title>
+    <meta name="description" content="Budget Tracker App" />
+    <meta name="author" content="Carlos Almeida" />
+    <title>Budget Tracker</title>
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
-    <!-- Core theme CSS (includes Bootstrap)-->
+    <!-- Custom CSS -->
     <link href="css/styles.css" rel="stylesheet" />
-    <!-- JQuery -->
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/load_manager_pages.js"></script>
+    <!-- JQuery and Chart.js -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="js/load_manager_pages.js"></script>
 </head>
 <body>
 <!-- Responsive navbar-->
 <div id="navbar"></div>
-<!-- Page Content-->
-<h1 class="text-center">Budget Tracker</h1>
-<!-- Budget form -->
-<form id="budget-form" class="text-center">
-    <label for="budgetAmount" class="fw-bold">Enter Budget:</label><br>
-    <input type="number" id="budgetAmount" placeholder="Enter budget amount:"><br>
-    <button type="button" class="m-3" onclick="createBudget()">Create Budget</button>
-    <button type="button" class="m-3" onclick="updateBudget()">Update Budget</button>
-</form>
-<br>
-<h2 class="text-center">Enter Expense</h2>
-<form id="expense-form" class="text-center">
-    <label for="expenseCategory">Category:</label><br>
-    <select id="expenseCategory" name="expenseCategory">
-        <option value="" disabled selected>Select a category</option>
-        <!-- Options for expense categories will be populated here -->
-    </select><br>
-    <label for="expenseDescription">Description:</label><br>
-    <input type="text" id="expenseDescription"><br>
-    <label for="expenseAmount">Amount:</label><br>
-    <input type="number" id="expenseAmount" placeholder="Enter amount:"><br>
-    <label for="expenseDate">Date:</label><br>
-    <input type="date" id="expenseDate"><br>
-    <button type="button" id="submit-btn" class="m-3" onclick="enterExpense()">Enter Expense</button>
-</form>
-<br>
-<form class="text-center">
-    <label for="newCategoryInput" class="fw-bold">Enter New Expense Category:</label><br>
-    <input type="text" id="newCategoryInput" name="newCategoryInput">
-    <button type="button" class="m-3" onclick="addCategory()">Add Category</button>
-</form>
-<form class="text-center">
-    <label for="deleteCategorySelect" class="fw-bold">Select Category to Delete:</label><br>
-    <select id="deleteCategorySelect" name="deleteCategorySelect">
-        <option value="" disabled selected>Enter Category</option>
-        <!-- Options for expense categories will be populated here -->
-    </select>
-    <button type="button" class="m-3" onclick="deleteCategory()">Delete Category</button>
-</form>
-<br>
-<!-- Expense list -->
-<form class="text-center">
-    <label for="budgetDisplay" class="fw-bold">Budget and Expenses:</label><br>
-    <div id="budgetDisplay" class="text-center"></div>
-    <div id="expenses-display"></div>
-    <div id="expense-list"></div>
-</form>
-<br>
+
+<!-- Main Content -->
+<div class="container my-4">
+    <h1 class="text-center">Budget Tracker</h1>
+    
+    <!-- Budget form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form id="budget-form" class="text-center">
+                <div class="mb-3">
+                    <label for="budgetAmount" class="fw-bold form-label">Enter Budget:</label>
+                    <input type="number" class="form-control" id="budgetAmount" placeholder="Enter budget amount:" min="0">
+                </div>
+                <button type="button" class="btn btn-primary m-2" onclick="createBudget()">Create Budget</button>
+                <button type="button" class="btn btn-secondary m-2" onclick="updateBudget()">Update Budget</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Expense form -->
+    <h2 class="text-center">Enter Expense</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form id="expense-form" class="text-center">
+                <div class="mb-3">
+                    <label for="expenseCategory" class="form-label">Category:</label>
+                    <select id="expenseCategory" class="form-select">
+                        <option value="" disabled selected>Select a category</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="expenseDescription" class="form-label">Description:</label>
+                    <input type="text" class="form-control" id="expenseDescription">
+                </div>
+                <div class="mb-3">
+                    <label for="expenseAmount" class="form-label">Amount:</label>
+                    <input type="number" class="form-control" id="expenseAmount" placeholder="Enter amount:" min="0">
+                </div>
+                <div class="mb-3">
+                    <label for="expenseDate" class="form-label">Date:</label>
+                    <input type="date" class="form-control" id="expenseDate">
+                </div>
+                <button type="button" class="btn btn-success m-2" onclick="enterExpense()">Enter Expense</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Delete Category -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <label for="newCategoryInput" class="fw-bold">Enter New Expense Category:</label>
+                    <input type="text" id="newCategoryInput" class="form-control" name="newCategoryInput">
+                    <button type="button" class="btn btn-info mt-3" onclick="addCategory()">Add Category</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <label for="deleteCategorySelect" class="fw-bold">Select Category to Delete:</label>
+                    <select id="deleteCategorySelect" class="form-select">
+                        <option value="" disabled selected>Select Category</option>
+                    </select>
+                    <button type="button" class="btn btn-danger mt-3" onclick="deleteCategory()">Delete Category</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expense List and Budget Display -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="text-center">Budget and Expenses</h3>
+            <div id="budgetDisplay" class="text-center mb-3"></div>
+            <div id="expenses-display" class="mb-3"></div>
+            <div id="expense-list"></div>
+            <div class="text-center">
+                <button class="btn btn-warning m-2" onclick="exportData()">Export Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expense Chart -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="text-center">Expense Distribution</h3>
+            <canvas id="expenseChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
 <script>
     // JavaScript for the budget tracker
 
@@ -76,158 +126,181 @@
 
     // Function to create the budget
     function createBudget() {
-        // Get the budget amount from the form
-        budget = Number(document.getElementById("budgetAmount").value);
-        // Save the budget in localStorage
+        let budgetAmount = document.getElementById("budgetAmount").value;
+        if (budgetAmount === "" || budgetAmount < 0) {
+            alert("Please enter a valid budget amount.");
+            return;
+        }
+        budget = Number(budgetAmount);
         localStorage.setItem("budget", budget);
-        // Display the budget
         displayBudget();
+        alert("Budget created successfully!");
     }
 
     // Function to update the budget
     function updateBudget() {
-        // Get the budget amount from the form
-        budget = Number(document.getElementById("budgetAmount").value);
-        // Save the budget in localStorage
+        let budgetAmount = document.getElementById("budgetAmount").value;
+        if (budgetAmount === "" || budgetAmount < 0) {
+            alert("Please enter a valid budget amount.");
+            return;
+        }
+        budget = Number(budgetAmount);
         localStorage.setItem("budget", budget);
-        // Update the budget display
         displayBudget();
+        alert("Budget updated successfully!");
     }
 
     // Function to display the budget
     function displayBudget() {
-        // Calculate the total expenses
         let totalExpenses = expenses.reduce((acc, expense) => acc + Number(expense.amount), 0);
-        // Calculate the remaining budget
         let remainingBudget = budget - totalExpenses;
-        // Display the budget and total expenses in the budgetDisplay div
-        document.getElementById("budgetDisplay").innerHTML = `Budget: $${budget.toFixed(2)}  |  Total Expenses: $${totalExpenses.toFixed(2)}  |  Remaining Budget: $${remainingBudget.toFixed(2)}`;
+        document.getElementById("budgetDisplay").innerHTML = `Budget: $${budget.toFixed(2)} | Total Expenses: $${totalExpenses.toFixed(2)} | Remaining Budget: $${remainingBudget.toFixed(2)}`;
     }
 
     // Function to enter an expense
     function enterExpense() {
-        // Get the expense category, amount, and date from the form
         let expenseCategory = document.getElementById("expenseCategory").value;
         let expenseAmount = document.getElementById("expenseAmount").value;
         let expenseDate = document.getElementById("expenseDate").value;
         let expenseDescription = document.getElementById("expenseDescription").value;
-        // Create an object for the expense with the category, amount, date, and description
+
+        if (!expenseCategory || !expenseAmount || !expenseDate || !expenseDescription || expenseAmount <= 0) {
+            alert("Please fill out all fields with valid data.");
+            return;
+        }
+
         let expense = {
             category: expenseCategory,
-            amount: expenseAmount,
+            amount: parseFloat(expenseAmount),
             date: expenseDate,
             description: expenseDescription
         };
-        // Add the expense to the expenses array
         expenses.push(expense);
-        // Save the expenses in localStorage
         localStorage.setItem("expenses", JSON.stringify(expenses));
-        // Display the expenses
         displayExpenses();
+        alert("Expense added successfully!");
     }
 
     // Function to display the expenses
     function displayExpenses() {
-        // Clear the expense list div
         document.getElementById("expense-list").innerHTML = "";
-        // Loop through the expenses array
         expenses.forEach((expense, index) => {
-            // Create a new li element for the expense
             let li = document.createElement("li");
-            // Set the innerHTML of the li element to the expense
-            // Include the amount, date, and description of the expense
-            li.innerHTML = `${expense.date}: $${expense.amount} - ${expense.description} (${expense.category})`;
-            // Create a delete button for the expense
+            li.innerHTML = `${expense.date}: $${expense.amount.toFixed(2)} - ${expense.description} (${expense.category})`;
             let deleteBtn = document.createElement("button");
             deleteBtn.innerHTML = "Delete";
-            // Attach an event listener to the delete button
+            deleteBtn.className = "btn btn-sm btn-danger ms-2";
             deleteBtn.addEventListener("click", () => {
-                // Remove the expense from the expenses array
                 expenses.splice(index, 1);
-                // Save the updated expenses in localStorage
                 localStorage.setItem("expenses", JSON.stringify(expenses));
-                // Update the expense list to reflect the deletion
                 displayExpenses();
             });
-            // Append the delete button to the li element
             li.appendChild(deleteBtn);
-            // Append the li element to the expense list div
             document.getElementById("expense-list").appendChild(li);
         });
-        // Calculate and display the total amount spent on each category
         displayCategoryTotals();
         displayBudget();
+        updateExpenseChart();
     }
 
     // Function to display the total amount spent on each category
     function displayCategoryTotals() {
-        // Initialize an object to hold the totals for each category
         let categoryTotals = {};
-        // Loop through the expenses array
         expenses.forEach(expense => {
-            // Check if the expense's category is already in the categoryTotals object
-            if (expense.category in categoryTotals) {
-                // If it is, add the expense's amount to the existing total for that category
-                categoryTotals[expense.category] += Number(expense.amount);
-            } else {
-                // If it isn't, add a new property to the object for the category and set its value to the expense's amount
-                categoryTotals[expense.category] = Number(expense.amount);
-            }
+            categoryTotals[expense.category] = (categoryTotals[expense.category] || 0) + expense.amount;
         });
-        // Clear the expenses display div
         document.getElementById("expenses-display").innerHTML = "";
-        // Loop through the categoryTotals object
         for (let category in categoryTotals) {
-            // Create a new div element to display the category and its total
             let div = document.createElement("div");
-            // Set the innerHTML of the div to the category and its total
             div.innerHTML = `${category}: $${categoryTotals[category].toFixed(2)}`;
-            // Append the div to the expenses display div
             document.getElementById("expenses-display").appendChild(div);
         }
     }
 
     // Function to add a new category to the expense form
     function addCategory() {
-        // Get the new category from the form
         let newCategory = document.getElementById("newCategoryInput").value;
-        // Create a new option element for the select element
+        if (!newCategory) {
+            alert("Please enter a category name.");
+            return;
+        }
         let option = document.createElement("option");
-        // Set the value of the option element to the new category
         option.value = newCategory;
-        // Set the innerHTML of the option element to the new category
         option.innerHTML = newCategory;
-        // Append the option element to the expense category select element
         document.getElementById("expenseCategory").appendChild(option);
-        // Append the cloned option element to the delete category select element
         document.getElementById("deleteCategorySelect").appendChild(option.cloneNode(true));
-        // Clear the input field
         document.getElementById("newCategoryInput").value = "";
-        // Update the display of category totals
         displayCategoryTotals();
     }
 
     // Function to delete a category from the expense form
     function deleteCategory() {
-        // Get the selected category from the form
         let categoryToDelete = document.getElementById("deleteCategorySelect").value;
-        // Remove the selected option element from both select elements
+        if (!categoryToDelete) {
+            alert("Please select a category to delete.");
+            return;
+        }
         let expenseCategorySelect = document.getElementById("expenseCategory");
         let deleteCategorySelect = document.getElementById("deleteCategorySelect");
 
-        // Remove the category from both selects
         expenseCategorySelect.querySelector(`option[value="${categoryToDelete}"]`).remove();
         deleteCategorySelect.querySelector(`option[value="${categoryToDelete}"]`).remove();
 
-        // Filter the expenses array to remove any expenses with the deleted category
         expenses = expenses.filter(expense => expense.category !== categoryToDelete);
-        // Save the updated expenses in localStorage
         localStorage.setItem("expenses", JSON.stringify(expenses));
-        // Update the expense list to reflect the deletion
         displayExpenses();
     }
 
-    // Check for saved budget and expenses in localStorage
+    // Function to export data to CSV
+    function exportData() {
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Category,Description,Amount,Date\n";
+        expenses.forEach(expense => {
+            csvContent += `${expense.category},${expense.description},${expense.amount},${expense.date}\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "expenses.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Function to update the expense chart
+    function updateExpenseChart() {
+        let ctx = document.getElementById('expenseChart').getContext('2d');
+        let categoryTotals = {};
+
+        expenses.forEach(expense => {
+            categoryTotals[expense.category] = (categoryTotals[expense.category] || 0) + expense.amount;
+        });
+
+        let labels = Object.keys(categoryTotals);
+        let data = Object.values(categoryTotals);
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+    }
+
+    // Initial Load: Check for saved budget and expenses in localStorage
     if (localStorage.getItem("budget")) {
         budget = Number(localStorage.getItem("budget"));
         displayBudget();
@@ -237,21 +310,11 @@
         displayExpenses();
     }
 
-    // Populate the select elements with options from the expenses array
-    let uniqueCategories = [...new Set(expenses.map(expense => expense.category))];
-    uniqueCategories.forEach(category => {
-        let option = document.createElement("option");
-        option.value = category;
-        option.innerHTML = category;
-        document.getElementById("expenseCategory").appendChild(option);
-        document.getElementById("deleteCategorySelect").appendChild(option.cloneNode(true));
-    });
-
     // Load the navbar
     $(function() {
         $("#navbar").load("navbar.html");
     });
-</script>
 
+</script>
 </body>
 </html>
