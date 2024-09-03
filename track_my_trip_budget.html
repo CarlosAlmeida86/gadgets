@@ -43,7 +43,6 @@
     <label for="expenseDate">Date:</label><br>
     <input type="date" id="expenseDate"><br>
     <button type="button" id="submit-btn" class="m-3" onclick="enterExpense()">Enter Expense</button>
-
 </form>
 <br>
 <form class="text-center">
@@ -62,7 +61,7 @@
 <br>
 <!-- Expense list -->
 <form class="text-center">
-    <label for="deleteCategorySelect" class="fw-bold">Budget and Expenses:</label><br>
+    <label for="budgetDisplay" class="fw-bold">Budget and Expenses:</label><br>
     <div id="budgetDisplay" class="text-center"></div>
     <div id="expenses-display"></div>
     <div id="expense-list"></div>
@@ -119,11 +118,11 @@
             date: expenseDate,
             description: expenseDescription
         };
-// Add the expense to the expenses array
+        // Add the expense to the expenses array
         expenses.push(expense);
-// Save the expenses in localStorage
+        // Save the expenses in localStorage
         localStorage.setItem("expenses", JSON.stringify(expenses));
-// Display the expenses
+        // Display the expenses
         displayExpenses();
     }
 
@@ -156,6 +155,7 @@
             document.getElementById("expense-list").appendChild(li);
         });
         // Calculate and display the total amount spent on each category
+        displayCategoryTotals();
         displayBudget();
     }
 
@@ -197,10 +197,13 @@
         option.value = newCategory;
         // Set the innerHTML of the option element to the new category
         option.innerHTML = newCategory;
-        // Append the option element to the select element
+        // Append the option element to the expense category select element
         document.getElementById("expenseCategory").appendChild(option);
+        // Append the cloned option element to the delete category select element
+        document.getElementById("deleteCategorySelect").appendChild(option.cloneNode(true));
         // Clear the input field
         document.getElementById("newCategoryInput").value = "";
+        // Update the display of category totals
         displayCategoryTotals();
     }
 
@@ -208,8 +211,14 @@
     function deleteCategory() {
         // Get the selected category from the form
         let categoryToDelete = document.getElementById("deleteCategorySelect").value;
-        // Remove the selected option element from the select element
-        document.getElementById("deleteCategorySelect").remove(document.getElementById("deleteCategorySelect").selectedIndex);
+        // Remove the selected option element from both select elements
+        let expenseCategorySelect = document.getElementById("expenseCategory");
+        let deleteCategorySelect = document.getElementById("deleteCategorySelect");
+
+        // Remove the category from both selects
+        expenseCategorySelect.querySelector(`option[value="${categoryToDelete}"]`).remove();
+        deleteCategorySelect.querySelector(`option[value="${categoryToDelete}"]`).remove();
+
         // Filter the expenses array to remove any expenses with the deleted category
         expenses = expenses.filter(expense => expense.category !== categoryToDelete);
         // Save the updated expenses in localStorage
@@ -229,15 +238,13 @@
     }
 
     // Populate the select elements with options from the expenses array
-    expenses.forEach(expense => {
+    let uniqueCategories = [...new Set(expenses.map(expense => expense.category))];
+    uniqueCategories.forEach(category => {
         let option = document.createElement("option");
-        option.value = expense.category;
-        option.innerHTML = expense.category;
+        option.value = category;
+        option.innerHTML = category;
         document.getElementById("expenseCategory").appendChild(option);
-        option = document.createElement("option");
-        option.value = expense.category;
-        option.innerHTML = expense.category;
-        document.getElementById("deleteCategorySelect").appendChild(option);
+        document.getElementById("deleteCategorySelect").appendChild(option.cloneNode(true));
     });
 
     // Load the navbar
