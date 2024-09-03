@@ -95,17 +95,20 @@
     </div>
 
     <!-- Expense List and Budget Display -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <h3 class="text-center">Budget and Expenses</h3>
-            <div id="budgetDisplay" class="text-center mb-3"></div>
-            <div id="expenses-display" class="mb-3"></div>
-            <div id="expense-list"></div>
-            <div class="text-center">
-                <button class="btn btn-warning m-2" onclick="exportData()">Export Data</button>
-            </div>
+<div class="card mb-4">
+    <div class="card-body">
+        <h3 class="text-center">Budget and Expenses</h3>
+        <div id="budgetDisplay" class="text-center mb-3"></div>
+        <div id="expenses-display" class="mb-3"></div>
+        <div id="expense-list"></div>
+        <div class="text-center">
+            <!-- Botão para exportar dados -->
+            <button class="btn btn-warning m-2" onclick="exportData()">Export Data</button>
+            <!-- Botão para limpar todos os registros -->
+            <button class="btn btn-danger m-2" onclick="clearAllData()">Clear All Records</button>
         </div>
     </div>
+</div>
 
     <!-- Expense Chart -->
     <div class="card mb-4">
@@ -116,7 +119,6 @@
     </div>
 </div>
 
-<!-- Scripts -->
 <script>
     // JavaScript for the budget tracker
 
@@ -178,7 +180,16 @@
         expenses.push(expense);
         localStorage.setItem("expenses", JSON.stringify(expenses));
         displayExpenses();
+        clearExpenseFields(); // Clear input fields after adding expense
         alert("Expense added successfully!");
+    }
+
+    // Function to clear input fields after adding an expense
+    function clearExpenseFields() {
+        document.getElementById("expenseCategory").value = "";
+        document.getElementById("expenseAmount").value = "";
+        document.getElementById("expenseDate").value = "";
+        document.getElementById("expenseDescription").value = "";
     }
 
     // Function to display the expenses
@@ -249,6 +260,19 @@
         expenses = expenses.filter(expense => expense.category !== categoryToDelete);
         localStorage.setItem("expenses", JSON.stringify(expenses));
         displayExpenses();
+    }
+
+    // Function to clear all data and reset the budget tracker
+    function clearAllData() {
+        if (confirm("Are you sure you want to clear all records? This action cannot be undone.")) {
+            localStorage.removeItem("budget");
+            localStorage.removeItem("expenses");
+            budget = 0;
+            expenses = [];
+            displayBudget();
+            displayExpenses();
+            alert("All records have been cleared.");
+        }
     }
 
     // Function to export data to CSV
